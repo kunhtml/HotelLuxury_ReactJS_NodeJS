@@ -11,6 +11,8 @@
   position: sticky;
   top: 0;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .admin-sidebar-header {
@@ -20,14 +22,55 @@
 }
 
 .admin-sidebar-header h2 {
-  margin: 0;
+  margin: 0 0 1rem 0;
   font-size: 1.5rem;
+}
+
+.admin-user-info {
+  margin-top: 1rem;
+}
+
+.admin-user-name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.admin-user-role {
+  font-size: 0.8rem;
+  color: #f8c12c;
+  margin-top: 0.25rem;
 }
 
 .admin-nav {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  flex: 1;
+}
+
+.admin-sidebar-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #333;
+  margin-top: auto;
+}
+
+.admin-logout-button {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 1rem;
+}
+
+.admin-logout-button:hover {
+  background-color: #d32f2f;
 }
 
 .admin-nav-item {
@@ -390,29 +433,29 @@
   .admin-dashboard {
     flex-direction: column;
   }
-  
+
   .admin-sidebar {
     width: 100%;
     height: auto;
     position: static;
     padding: 1rem 0;
   }
-  
+
   .admin-nav {
     flex-direction: row;
     overflow-x: auto;
     padding: 0 1rem;
   }
-  
+
   .admin-nav-item {
     padding: 0.75rem 1rem;
     white-space: nowrap;
   }
-  
+
   .stats-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .rooms-table-container,
   .bookings-table-container,
   .reviews-table-container,
