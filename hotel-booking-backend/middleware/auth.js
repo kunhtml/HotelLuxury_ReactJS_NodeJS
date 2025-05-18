@@ -1,10 +1,12 @@
 // Middleware to verify user is authenticated using session
 const verifyToken = (req, res, next) => {
   if (!req.session || !req.session.user) {
+    console.log("Session missing or user not in session:", req.session);
     return res.status(401).json({ message: "Not authenticated, please login" });
   }
 
   req.user = req.session.user;
+  console.log("User authenticated:", req.user.email);
   next();
 };
 
