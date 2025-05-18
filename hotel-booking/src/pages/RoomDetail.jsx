@@ -1,5 +1,6 @@
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { rooms } from "../data/rooms";
+import { roomService } from "../services/api";
 import BookingForm from "../components/BookingForm";
 import ReviewsList from "../components/reviews/ReviewsList";
 import ReviewForm from "../components/reviews/ReviewForm";
@@ -9,13 +10,36 @@ import "./RoomDetail.css";
 const RoomDetail = () => {
   const { id } = useParams();
   const { currentUser } = useAuth();
-  const room = rooms.find((room) => room.id === parseInt(id));
+  const [room, setRoom] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (!room) {
+  useEffect(() => {
+    const fetchRoom = async () => {
+      try {
+        setLoading(true);
+        const roomData = await roomService.getRoomById(parseInt(id));
+        setRoom(roomData);
+      } catch (err) {
+        setError(err.message || "Error loading room details");
+        console.error("Error fetching room:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRoom();
+  }, [id]);
+
+  if (loading) {
+    return <div className="loading">Loading room details...</div>;
+  }
+
+  if (error || !room) {
     return (
       <div className="room-not-found">
         <h2>Room Not Found</h2>
-        <p>The room you're looking for doesn't exist.</p>
+        <p>{error || "The room you're looking for doesn't exist."}</p>
         <Link to="/rooms" className="back-btn">
           Back to Rooms
         </Link>
