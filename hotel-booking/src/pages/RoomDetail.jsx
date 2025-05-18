@@ -32,16 +32,16 @@ const RoomDetail = () => {
   }, [id]);
 
   if (loading) {
-    return <div className="loading">Loading room details...</div>;
+    return <div className="loading">Đang tải thông tin phòng...</div>;
   }
 
   if (error || !room) {
     return (
       <div className="room-not-found">
-        <h2>Room Not Found</h2>
-        <p>{error || "The room you're looking for doesn't exist."}</p>
+        <h2>Không Tìm Thấy Phòng</h2>
+        <p>{error || "Phòng bạn đang tìm kiếm không tồn tại."}</p>
         <Link to="/rooms" className="back-btn">
-          Back to Rooms
+          Quay Lại Danh Sách Phòng
         </Link>
       </div>
     );
@@ -53,7 +53,7 @@ const RoomDetail = () => {
         <div className="room-detail-header">
           <h1>{room.name}</h1>
           <p className="room-price">
-            ${room.price} <span>per night</span>
+            ${room.price} <span>mỗi đêm</span>
           </p>
         </div>
 
@@ -63,26 +63,26 @@ const RoomDetail = () => {
 
         <div className="room-info-container">
           <div className="room-description">
-            <h2>Description</h2>
+            <h2>Mô Tả</h2>
             <p>{room.description}</p>
           </div>
 
           <div className="room-details">
-            <h2>Details</h2>
+            <h2>Chi Tiết</h2>
             <ul>
               <li>
-                <span className="detail-label">Capacity:</span>
-                <span className="detail-value">{room.capacity} people</span>
+                <span className="detail-label">Sức Chứa:</span>
+                <span className="detail-value">{room.capacity} người</span>
               </li>
               <li>
-                <span className="detail-label">Size:</span>
+                <span className="detail-label">Kích Thước:</span>
                 <span className="detail-value">{room.size} m²</span>
               </li>
             </ul>
           </div>
 
           <div className="room-amenities">
-            <h2>Amenities</h2>
+            <h2>Tiện Nghi</h2>
             <ul>
               {room.amenities.map((amenity, index) => (
                 <li key={index}>{amenity}</li>
