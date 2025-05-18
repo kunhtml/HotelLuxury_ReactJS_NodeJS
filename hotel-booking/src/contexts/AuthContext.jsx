@@ -15,10 +15,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
-        if (localStorage.getItem("token")) {
-          const user = await authService.getCurrentUser();
-          setCurrentUser(user);
-        }
+        // Try to get current user from session
+        const user = await authService.getCurrentUser();
+        setCurrentUser(user);
       } catch (error) {
         console.error("Error fetching current user:", error);
       } finally {
