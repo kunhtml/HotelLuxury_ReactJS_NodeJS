@@ -63,13 +63,28 @@ export const AuthProvider = ({ children }) => {
 
   // Logout user
   const signOut = async () => {
-    authService.logout();
+    await authService.logout();
     setCurrentUser(null);
   };
 
   // Check if user is admin
   const isAdmin = () => {
     return currentUser?.role === "admin";
+  };
+
+  // Update user profile
+  const updateUserProfile = async (userData) => {
+    try {
+      // This is a placeholder - you'll need to implement updateProfile in authService
+      const updatedUser = await authService.updateProfile(userData);
+      setCurrentUser((prev) => ({
+        ...prev,
+        ...updatedUser,
+      }));
+      return updatedUser;
+    } catch (error) {
+      throw error;
+    }
   };
 
   // Create admin account (for demo)
@@ -89,6 +104,7 @@ export const AuthProvider = ({ children }) => {
     loginWithGoogle,
     signOut,
     isAdmin,
+    updateUserProfile,
     createAdminAccount,
     loading,
   };
