@@ -1,40 +1,50 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { FaEye, FaSearch, FaFilter, FaCheck, FaTimes, FaCalendarAlt } from 'react-icons/fa';
-import { format } from 'date-fns';
-import { bookingService } from '../../services/api';
-import './AdminDashboard.css';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import {
+  FaEye,
+  FaSearch,
+  FaFilter,
+  FaCheck,
+  FaTimes,
+  FaCalendarAlt,
+} from "react-icons/fa";
+import { format } from "date-fns";
+import { bookingService } from "../../services/api";
+import "./AdminDashboard.css";
 
 const AdminBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [filteredBookings, setFilteredBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [filter, setFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
-  const [newStatus, setNewStatus] = useState('');
+  const [newStatus, setNewStatus] = useState("");
 
   useEffect(() => {
     const fetchBookings = async () => {
       setLoading(true);
       try {
         const bookingsData = await bookingService.getAllBookings();
-        
+
         // Format dates
-        const formattedBookings = bookingsData.map(booking => ({
+        const formattedBookings = bookingsData.map((booking) => ({
           ...booking,
-          formattedCheckIn: format(new Date(booking.check_in), 'dd/MM/yyyy'),
-          formattedCheckOut: format(new Date(booking.check_out), 'dd/MM/yyyy'),
-          formattedCreatedAt: format(new Date(booking.created_at), 'dd/MM/yyyy HH:mm')
+          formattedCheckIn: format(new Date(booking.check_in), "dd/MM/yyyy"),
+          formattedCheckOut: format(new Date(booking.check_out), "dd/MM/yyyy"),
+          formattedCreatedAt: format(
+            new Date(booking.created_at),
+            "dd/MM/yyyy HH:mm"
+          ),
         }));
-        
+
         setBookings(formattedBookings);
         setFilteredBookings(formattedBookings);
       } catch (err) {
-        setError(err.message || 'Có lỗi xảy ra khi tải dữ liệu đặt phòng');
-        console.error('Error fetching bookings:', err);
+        setError(err.message || "Có lỗi xảy ra khi tải dữ liệu đặt phòng");
+        console.error("Error fetching bookings:", err);
       } finally {
         setLoading(false);
       }
@@ -46,25 +56,26 @@ const AdminBookings = () => {
   useEffect(() => {
     // Lọc đặt phòng dựa trên filter và searchTerm
     let result = [...bookings];
-    
+
     // Áp dụng filter
-    if (filter !== 'all') {
-      result = result.filter(booking => booking.status === filter);
+    if (filter !== "all") {
+      result = result.filter((booking) => booking.status === filter);
     }
-    
+
     // Áp dụng tìm kiếm
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      result = result.filter(booking => 
-        booking.room_name?.toLowerCase().includes(term) || 
-        booking.user_name?.toLowerCase().includes(term) ||
-        booking.user_email?.toLowerCase().includes(term) ||
-        booking.first_name?.toLowerCase().includes(term) ||
-        booking.last_name?.toLowerCase().includes(term) ||
-        booking.email?.toLowerCase().includes(term)
+      result = result.filter(
+        (booking) =>
+          booking.room_name?.toLowerCase().includes(term) ||
+          booking.user_name?.toLowerCase().includes(term) ||
+          booking.user_email?.toLowerCase().includes(term) ||
+          booking.first_name?.toLowerCase().includes(term) ||
+          booking.last_name?.toLowerCase().includes(term) ||
+          booking.email?.toLowerCase().includes(term)
       );
     }
-    
+
     setFilteredBookings(result);
   }, [bookings, filter, searchTerm]);
 
@@ -85,38 +96,43 @@ const AdminBookings = () => {
   const closeStatusModal = () => {
     setShowStatusModal(false);
     setSelectedBooking(null);
-    setNewStatus('');
+    setNewStatus("");
   };
 
   const confirmStatusChange = async () => {
     if (!selectedBooking || !newStatus) return;
-    
+
     try {
       await bookingService.updateBookingStatus(selectedBooking.id, newStatus);
-      
+
       // Update local state
-      const updatedBookings = bookings.map(booking => {
+      const updatedBookings = bookings.map((booking) => {
         if (booking.id === selectedBooking.id) {
           return { ...booking, status: newStatus };
         }
         return booking;
       });
-      
+
       setBookings(updatedBookings);
       closeStatusModal();
     } catch (err) {
-      setError(err.message || 'Có lỗi xảy ra khi cập nhật trạng thái');
-      console.error('Error updating booking status:', err);
+      setError(err.message || "Có lỗi xảy ra khi cập nhật trạng thái");
+      console.error("Error updating booking status:", err);
     }
   };
 
   const getStatusLabel = (status) => {
     switch (status) {
-      case 'pending': return 'Đang Chờ';
-      case 'confirmed': return 'Đã Xác Nhận';
-      case 'cancelled': return 'Đã Hủy';
-      case 'completed': return 'Đã Hoàn Thành';
-      default: return status;
+      case "pending":
+        return "Đang Chờ";
+      case "confirmed":
+        return "Đã Xác Nhận";
+      case "cancelled":
+        return "Đã Hủy";
+      case "completed":
+        return "Đã Hoàn Thành";
+      default:
+        return status;
     }
   };
 
@@ -133,11 +149,11 @@ const AdminBookings = () => {
       <div className="admin-header">
         <h1>Quản Lý Đặt Phòng</h1>
       </div>
-      
+
       <div className="booking-filters">
         <div className="filter-group">
           <FaFilter className="filter-icon" />
-          <select 
+          <select
             className="filter-select"
             value={filter}
             onChange={handleFilterChange}
@@ -149,19 +165,19 @@ const AdminBookings = () => {
             <option value="cancelled">Đã Hủy</option>
           </select>
         </div>
-        
+
         <div className="search-group">
           <FaSearch className="search-icon" />
-          <input 
-            type="text" 
-            placeholder="Tìm kiếm đặt phòng..." 
+          <input
+            type="text"
+            placeholder="Tìm kiếm đặt phòng..."
             className="search-input"
             value={searchTerm}
             onChange={handleSearchChange}
           />
         </div>
       </div>
-      
+
       <div className="bookings-table-container">
         {filteredBookings.length === 0 ? (
           <div className="no-data">Không tìm thấy đặt phòng nào</div>
@@ -180,12 +196,14 @@ const AdminBookings = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredBookings.map(booking => (
+              {filteredBookings.map((booking) => (
                 <tr key={booking.id}>
                   <td>{booking.id}</td>
                   <td>{booking.room_name}</td>
                   <td>
-                    <div>{booking.first_name} {booking.last_name}</div>
+                    <div>
+                      {booking.first_name} {booking.last_name}
+                    </div>
                     <div className="email-cell">{booking.email}</div>
                   </td>
                   <td>{booking.formattedCheckIn}</td>
@@ -197,38 +215,41 @@ const AdminBookings = () => {
                     </span>
                   </td>
                   <td className="action-buttons">
-                    <Link to={`/admin/bookings/view/${booking.id}`} className="view-button">
+                    <Link
+                      to={`/admin/bookings/view/${booking.id}`}
+                      className="view-button"
+                    >
                       <FaEye /> Xem
                     </Link>
-                    
-                    {booking.status === 'pending' && (
+
+                    {booking.status === "pending" && (
                       <>
-                        <button 
+                        <button
                           className="confirm-button"
-                          onClick={() => openStatusModal(booking, 'confirmed')}
+                          onClick={() => openStatusModal(booking, "confirmed")}
                         >
                           <FaCheck /> Xác Nhận
                         </button>
-                        <button 
+                        <button
                           className="cancel-button"
-                          onClick={() => openStatusModal(booking, 'cancelled')}
+                          onClick={() => openStatusModal(booking, "cancelled")}
                         >
                           <FaTimes /> Hủy
                         </button>
                       </>
                     )}
-                    
-                    {booking.status === 'confirmed' && (
+
+                    {booking.status === "confirmed" && (
                       <>
-                        <button 
+                        <button
                           className="complete-button"
-                          onClick={() => openStatusModal(booking, 'completed')}
+                          onClick={() => openStatusModal(booking, "completed")}
                         >
                           <FaCalendarAlt /> Hoàn Thành
                         </button>
-                        <button 
+                        <button
                           className="cancel-button"
-                          onClick={() => openStatusModal(booking, 'cancelled')}
+                          onClick={() => openStatusModal(booking, "cancelled")}
                         >
                           <FaTimes /> Hủy
                         </button>
@@ -247,13 +268,20 @@ const AdminBookings = () => {
         <div className="modal-overlay">
           <div className="modal-content">
             <h2>Xác Nhận Thay Đổi Trạng Thái</h2>
-            <p>
-              Bạn có chắc chắn muốn thay đổi trạng thái đặt phòng #{selectedBooking?.id} sang{' '}
-              <strong>{getStatusLabel(newStatus)}</strong>?
-            </p>
+            <div className="modal-container">
+              <p>
+                Bạn có chắc chắn muốn thay đổi trạng thái đặt phòng{" "}
+                <strong>#{selectedBooking?.id}</strong> sang{" "}
+                <strong>{getStatusLabel(newStatus)}</strong>?
+              </p>
+            </div>
             <div className="modal-actions">
-              <button className="cancel-button" onClick={closeStatusModal}>Hủy</button>
-              <button className="confirm-button" onClick={confirmStatusChange}>Xác Nhận</button>
+              <button className="cancel-button" onClick={closeStatusModal}>
+                Hủy
+              </button>
+              <button className="confirm-button" onClick={confirmStatusChange}>
+                Xác Nhận
+              </button>
             </div>
           </div>
         </div>
