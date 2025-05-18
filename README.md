@@ -232,7 +232,7 @@ Dự án này được cấp phép theo Giấy phép MIT - xem file LICENSE đ�
 
 ## 👥 Người Đóng Góp
 
-- Tên của bạn - Công việc ban đầu
+- Phạm Xuân Hiếu - Code Dự Án
 
 ## 🙏 Lời Cảm Ơn
 
