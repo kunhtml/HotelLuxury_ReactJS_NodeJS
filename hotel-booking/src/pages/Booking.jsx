@@ -34,10 +34,10 @@ const Booking = () => {
     return (
       <div className="booking-page">
         <div className="booking-header">
-          <h1>Book Your Stay</h1>
-          <p>Select a room and fill out the booking form</p>
+          <h1>Đặt Phòng</h1>
+          <p>Chọn phòng và điền vào biểu mẫu đặt phòng</p>
         </div>
-        <div className="loading">Loading rooms...</div>
+        <div className="loading">Đang tải danh sách phòng...</div>
       </div>
     );
   }
@@ -46,8 +46,8 @@ const Booking = () => {
     return (
       <div className="booking-page">
         <div className="booking-header">
-          <h1>Book Your Stay</h1>
-          <p>Select a room and fill out the booking form</p>
+          <h1>Đặt Phòng</h1>
+          <p>Chọn phòng và điền vào biểu mẫu đặt phòng</p>
         </div>
         <div className="error-message">{error}</div>
       </div>
@@ -57,13 +57,13 @@ const Booking = () => {
   return (
     <div className="booking-page">
       <div className="booking-header">
-        <h1>Book Your Stay</h1>
-        <p>Select a room and fill out the booking form</p>
+        <h1>Đặt Phòng</h1>
+        <p>Chọn phòng và điền vào biểu mẫu đặt phòng</p>
       </div>
 
       {!selectedRoom ? (
         <div className="room-selection">
-          <h2>Select a Room</h2>
+          <h2>Chọn Phòng</h2>
           <div className="room-options">
             {rooms.map((room) => (
               <div
@@ -78,10 +78,10 @@ const Booking = () => {
                 <div className="room-option-info">
                   <h3>{room.name}</h3>
                   <p className="room-price">
-                    ${room.price} <span>per night</span>
+                    ${room.price} <span>mỗi đêm</span>
                   </p>
                   <p className="room-capacity">
-                    Capacity: {room.capacity} people
+                    Sức chứa: {room.capacity} người
                   </p>
                 </div>
               </div>
@@ -101,14 +101,14 @@ const Booking = () => {
             <div className="room-details">
               <h3>{selectedRoom.name}</h3>
               <p className="room-price">
-                ${selectedRoom.price} <span>per night</span>
+                ${selectedRoom.price} <span>mỗi đêm</span>
               </p>
               <p className="room-description">{selectedRoom.description}</p>
               <button
                 className="change-room-btn"
                 onClick={() => setSelectedRoom(null)}
               >
-                Change Room
+                Đổi Phòng
               </button>
             </div>
           </div>
