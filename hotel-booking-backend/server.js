@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const session = require("express-session");
+const MemoryStore = require("memorystore")(session);
 
 // Load environment variables
 dotenv.config();
@@ -30,11 +31,15 @@ app.use(
   session({
     secret: process.env.JWT_SECRET || "your-secret-key",
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
+    store: new MemoryStore({
+      checkPeriod: 86400000, // prune expired entries every 24h
+    }),
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+      secure: false, // Set to true only in production with HTTPS
       maxAge: 24 * 60 * 60 * 1000, // 1 day
+      sameSite: "lax",
     },
   })
 );
