@@ -66,7 +66,7 @@ const Rooms = () => {
   };
 
   if (loading) {
-    return <div className="loading">Loading rooms...</div>;
+    return <div className="loading">Đang tải danh sách phòng...</div>;
   }
 
   if (error) {
@@ -76,36 +76,36 @@ const Rooms = () => {
   return (
     <div className="rooms-page">
       <div className="rooms-header">
-        <h1>Our Rooms</h1>
-        <p>Choose from our selection of luxurious rooms and suites</p>
+        <h1>Danh Sách Phòng</h1>
+        <p>Lựa chọn từ bộ sưu tập phòng và suite sang trọng của chúng tôi</p>
       </div>
 
       <div className="filters">
         <div className="filter-group">
-          <label htmlFor="capacity">Minimum Capacity:</label>
+          <label htmlFor="capacity">Sức Chứa Tối Thiểu:</label>
           <select
             id="capacity"
             name="capacity"
             value={filters.capacity}
             onChange={handleFilterChange}
           >
-            <option value="">Any</option>
-            <option value="1">1 Person</option>
-            <option value="2">2 People</option>
-            <option value="3">3 People</option>
-            <option value="4">4 People</option>
+            <option value="">Tất Cả</option>
+            <option value="1">1 Người</option>
+            <option value="2">2 Người</option>
+            <option value="3">3 Người</option>
+            <option value="4">4 Người</option>
           </select>
         </div>
 
         <div className="filter-group">
-          <label htmlFor="price">Maximum Price:</label>
+          <label htmlFor="price">Giá Tối Đa:</label>
           <select
             id="price"
             name="price"
             value={filters.price}
             onChange={handleFilterChange}
           >
-            <option value="">Any</option>
+            <option value="">Tất Cả</option>
             <option value="100">$100</option>
             <option value="200">$200</option>
             <option value="300">$300</option>
@@ -120,7 +120,8 @@ const Rooms = () => {
           filteredRooms.map((room) => <RoomCard key={room.id} room={room} />)
         ) : (
           <p className="no-rooms">
-            No rooms match your criteria. Please adjust your filters.
+            Không tìm thấy phòng phù hợp với tiêu chí. Vui lòng điều chỉnh bộ
+            lọc.
           </p>
         )}
       </div>
