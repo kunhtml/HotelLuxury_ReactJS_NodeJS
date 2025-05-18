@@ -1,28 +1,21 @@
-const jwt = require('jsonwebtoken');
-
-// Middleware to verify JWT token
+// Middleware to verify user is authenticated using session
 const verifyToken = (req, res, next) => {
-  const token = req.header('x-auth-token');
-  
-  if (!token) {
-    return res.status(401).json({ message: 'No token, authorization denied' });
+  if (!req.session || !req.session.user) {
+    return res.status(401).json({ message: "Not authenticated, please login" });
   }
-  
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (error) {
-    res.status(401).json({ message: 'Token is not valid' });
-  }
+
+  req.user = req.session.user;
+  next();
 };
 
 // Middleware to check if user is admin
 const isAdmin = (req, res, next) => {
-  if (req.user && req.user.role === 'admin') {
+  if (req.user && req.user.role === "admin") {
     next();
   } else {
-    res.status(403).json({ message: 'Access denied, admin privileges required' });
+    res
+      .status(403)
+      .json({ message: "Access denied, admin privileges required" });
   }
 };
 
