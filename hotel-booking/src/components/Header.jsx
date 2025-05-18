@@ -17,35 +17,39 @@ const Header = () => {
   return (
     <header className="header">
       <div className="logo">
-        <Link to="/">Luxury Hotel</Link>
+        <Link to="/">Khách Sạn Luxury</Link>
       </div>
       <nav className="nav">
         <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/rooms">Rooms</Link>
-          </li>
-          <li>
-            <Link to="/booking">Book Now</Link>
-          </li>
+          {!currentUser || !isAdmin() ? (
+            <>
+              <li>
+                <Link to="/">Trang Chủ</Link>
+              </li>
+              <li>
+                <Link to="/rooms">Phòng</Link>
+              </li>
+              <li>
+                <Link to="/booking">Đặt Phòng</Link>
+              </li>
+            </>
+          ) : null}
 
           {currentUser ? (
             <>
               <li className="dropdown">
                 <button className="dropdown-toggle">
-                  <FaUser /> {currentUser.displayName || "Account"}
+                  <FaUser /> {currentUser.displayName || "Tài Khoản"}
                 </button>
                 <div className="dropdown-menu">
-                  <Link to="/dashboard">My Bookings</Link>
+                  {!isAdmin() && <Link to="/dashboard">Đặt Phòng Của Tôi</Link>}
                   {isAdmin() && (
                     <Link to="/admin">
-                      <FaUserShield /> Admin Panel
+                      <FaUserShield /> Quản Trị Viên
                     </Link>
                   )}
                   <button onClick={handleSignOut} className="sign-out-btn">
-                    <FaSignOutAlt /> Sign Out
+                    <FaSignOutAlt /> Đăng Xuất
                   </button>
                 </div>
               </li>
@@ -54,12 +58,12 @@ const Header = () => {
             <>
               <li>
                 <Link to="/login" className="auth-link">
-                  Login
+                  Đăng Nhập
                 </Link>
               </li>
               <li>
                 <Link to="/signup" className="auth-link signup">
-                  Sign Up
+                  Đăng Ký
                 </Link>
               </li>
             </>
