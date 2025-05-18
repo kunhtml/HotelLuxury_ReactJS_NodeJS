@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, Routes, Route, useLocation } from "react-router-dom";
 import {
   FaHotel,
   FaCalendarAlt,
@@ -14,12 +14,30 @@ import AdminRooms from "./AdminRooms";
 import AdminBookings from "./AdminBookings";
 import AdminReviews from "./AdminReviews";
 import AdminUsers from "./AdminUsers";
+import RoomForm from "./RoomForm";
 import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const { currentUser, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Set active tab based on current path
+  useEffect(() => {
+    const path = location.pathname;
+    if (path.includes("/admin/rooms")) {
+      setActiveTab("rooms");
+    } else if (path.includes("/admin/bookings")) {
+      setActiveTab("bookings");
+    } else if (path.includes("/admin/reviews")) {
+      setActiveTab("reviews");
+    } else if (path.includes("/admin/users")) {
+      setActiveTab("users");
+    } else {
+      setActiveTab("overview");
+    }
+  }, [location.pathname]);
 
   const handleLogout = async () => {
     try {
@@ -47,7 +65,7 @@ const AdminDashboard = () => {
             className={`admin-nav-item ${
               activeTab === "overview" ? "active" : ""
             }`}
-            onClick={() => setActiveTab("overview")}
+            onClick={() => navigate("/admin")}
           >
             <FaChartLine /> Tổng Quan
           </button>
@@ -55,7 +73,7 @@ const AdminDashboard = () => {
             className={`admin-nav-item ${
               activeTab === "rooms" ? "active" : ""
             }`}
-            onClick={() => setActiveTab("rooms")}
+            onClick={() => navigate("/admin/rooms")}
           >
             <FaHotel /> Phòng
           </button>
@@ -63,7 +81,7 @@ const AdminDashboard = () => {
             className={`admin-nav-item ${
               activeTab === "bookings" ? "active" : ""
             }`}
-            onClick={() => setActiveTab("bookings")}
+            onClick={() => navigate("/admin/bookings")}
           >
             <FaCalendarAlt /> Đặt Phòng
           </button>
@@ -71,7 +89,7 @@ const AdminDashboard = () => {
             className={`admin-nav-item ${
               activeTab === "reviews" ? "active" : ""
             }`}
-            onClick={() => setActiveTab("reviews")}
+            onClick={() => navigate("/admin/reviews")}
           >
             <FaComments /> Đánh Giá
           </button>
@@ -79,7 +97,7 @@ const AdminDashboard = () => {
             className={`admin-nav-item ${
               activeTab === "users" ? "active" : ""
             }`}
-            onClick={() => setActiveTab("users")}
+            onClick={() => navigate("/admin/users")}
           >
             <FaUsers /> Người Dùng
           </button>
@@ -92,11 +110,16 @@ const AdminDashboard = () => {
       </div>
 
       <div className="admin-content">
-        {activeTab === "overview" && <AdminOverview />}
-        {activeTab === "rooms" && <AdminRooms />}
-        {activeTab === "bookings" && <AdminBookings />}
-        {activeTab === "reviews" && <AdminReviews />}
-        {activeTab === "users" && <AdminUsers />}
+        <Routes>
+          <Route path="/" element={<AdminOverview />} />
+          <Route path="/rooms" element={<AdminRooms />} />
+          <Route path="/rooms/add" element={<RoomForm />} />
+          <Route path="/rooms/edit/:id" element={<RoomForm />} />
+          <Route path="/bookings" element={<AdminBookings />} />
+          <Route path="/reviews" element={<AdminReviews />} />
+          <Route path="/users" element={<AdminUsers />} />
+          <Route path="*" element={<AdminOverview />} />
+        </Routes>
       </div>
     </div>
   );
