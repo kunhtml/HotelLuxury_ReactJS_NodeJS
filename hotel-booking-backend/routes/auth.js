@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const pool = require("../config/db");
 const { verifyToken } = require("../middleware/auth");
 
@@ -36,22 +35,17 @@ router.post("/register", async (req, res) => {
       [result.insertId]
     );
 
-    // Create JWT token
-    const token = jwt.sign(
-      {
-        id: user[0].id,
-        firstName: user[0].first_name,
-        lastName: user[0].last_name,
-        email: user[0].email,
-        phone: user[0].phone,
-        role: user[0].role,
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
+    // Store user in session
+    req.session.user = {
+      id: user[0].id,
+      firstName: user[0].first_name,
+      lastName: user[0].last_name,
+      email: user[0].email,
+      phone: user[0].phone,
+      role: user[0].role,
+    };
 
     res.status(201).json({
-      token,
       user: {
         id: user[0].id,
         firstName: user[0].first_name,
@@ -90,22 +84,17 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // Create JWT token
-    const token = jwt.sign(
-      {
-        id: user.id,
-        firstName: user.first_name,
-        lastName: user.last_name,
-        email: user.email,
-        phone: user.phone,
-        role: user.role,
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
+    // Store user in session
+    req.session.user = {
+      id: user.id,
+      firstName: user.first_name,
+      lastName: user.last_name,
+      email: user.email,
+      phone: user.phone,
+      role: user.role,
+    };
 
     res.json({
-      token,
       user: {
         id: user.id,
         firstName: user.first_name,
@@ -133,11 +122,28 @@ router.get("/me", verifyToken, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.json(users[0]);
+    res.json({
+      id: users[0].id,
+      firstName: users[0].first_name,
+      lastName: users[0].last_name,
+      email: users[0].email,
+      phone: users[0].phone,
+      role: users[0].role,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
+});
+
+// Logout user
+router.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ message: "Could not log out" });
+    }
+    res.json({ message: "Logged out successfully" });
+  });
 });
 
 // Create admin account (for demo purposes)
