@@ -1,0 +1,422 @@
+.admin-dashboard {
+  display: flex;
+  min-height: calc(100vh - 60px);
+}
+
+.admin-sidebar {
+  width: 250px;
+  background-color: #1a1a1a;
+  color: white;
+  padding: 1.5rem 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.admin-sidebar-header {
+  padding: 0 1.5rem 1.5rem;
+  border-bottom: 1px solid #333;
+  margin-bottom: 1.5rem;
+}
+
+.admin-sidebar-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  color: #ccc;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 1rem;
+}
+
+.admin-nav-item:hover {
+  background-color: #333;
+  color: white;
+}
+
+.admin-nav-item.active {
+  background-color: #f8c12c;
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.admin-content {
+  flex: 1;
+  padding: 2rem;
+  background-color: #f5f5f5;
+  overflow-y: auto;
+}
+
+/* Overview Styles */
+.admin-overview h1,
+.admin-rooms h1,
+.admin-bookings h1,
+.admin-reviews h1,
+.admin-users h1 {
+  margin-bottom: 2rem;
+  color: #1a1a1a;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.stat-header {
+  padding: 1rem 1.5rem;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #eee;
+}
+
+.stat-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.stat-content {
+  padding: 1.5rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.stat-item:last-child {
+  margin-bottom: 0;
+}
+
+.stat-label {
+  color: #666;
+}
+
+.stat-value {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.quick-actions {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.quick-actions h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #1a1a1a;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.action-button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: #1a1a1a;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.action-button:hover {
+  background-color: #333;
+  transform: translateY(-2px);
+}
+
+/* Table Styles */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.add-button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: #1a1a1a;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.add-button:hover {
+  background-color: #333;
+  transform: translateY(-2px);
+}
+
+.room-filters,
+.booking-filters,
+.review-filters,
+.user-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-select,
+.search-input {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.filter-select {
+  min-width: 150px;
+}
+
+.search-input {
+  flex: 1;
+}
+
+.rooms-table-container,
+.bookings-table-container,
+.reviews-table-container,
+.users-table-container {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.rooms-table,
+.bookings-table,
+.reviews-table,
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rooms-table th,
+.bookings-table th,
+.reviews-table th,
+.users-table th {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #eee;
+}
+
+.rooms-table td,
+.bookings-table td,
+.reviews-table td,
+.users-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.rooms-table tr:last-child td,
+.bookings-table tr:last-child td,
+.reviews-table tr:last-child td,
+.users-table tr:last-child td {
+  border-bottom: none;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-badge.available {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-badge.occupied {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.status-badge.upcoming {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-badge.active {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-badge.completed {
+  background-color: #f5f5f5;
+  color: #616161;
+}
+
+.status-badge.cancelled {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.status-badge.approved {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-badge.pending {
+  background-color: #fff8e1;
+  color: #ff8f00;
+}
+
+.status-badge.rejected {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.role-badge.admin {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.role-badge.user {
+  background-color: #f5f5f5;
+  color: #616161;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-button,
+.view-button,
+.approve-button,
+.reject-button,
+.cancel-button {
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+}
+
+.edit-button {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.edit-button:hover {
+  background-color: #bbdefb;
+}
+
+.view-button {
+  background-color: #f5f5f5;
+  color: #616161;
+}
+
+.view-button:hover {
+  background-color: #e0e0e0;
+}
+
+.approve-button {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.approve-button:hover {
+  background-color: #c8e6c9;
+}
+
+.reject-button,
+.cancel-button {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.reject-button:hover,
+.cancel-button:hover {
+  background-color: #ffcdd2;
+}
+
+.comment-cell {
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 1024px) {
+  .admin-dashboard {
+    flex-direction: column;
+  }
+  
+  .admin-sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    padding: 1rem 0;
+  }
+  
+  .admin-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 0 1rem;
+  }
+  
+  .admin-nav-item {
+    padding: 0.75rem 1rem;
+    white-space: nowrap;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .rooms-table-container,
+  .bookings-table-container,
+  .reviews-table-container,
+  .users-table-container {
+    overflow-x: auto;
+  }
+}

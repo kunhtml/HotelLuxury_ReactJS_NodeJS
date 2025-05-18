@@ -1,0 +1,159 @@
+.room-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: visible; /* Changed from hidden to visible */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  background-color: white;
+  margin-bottom: 3rem; /* Increased from 2rem to 3rem to provide more space */
+  position: relative; /* Added position relative */
+}
+
+.room-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.room-image {
+  height: 200px;
+  overflow: hidden;
+  border-radius: 8px 8px 0 0; /* Added border radius to top corners */
+}
+
+.room-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.room-card:hover .room-image img {
+  transform: scale(1.05);
+}
+
+.room-info {
+  padding: 1.5rem;
+  background-color: white;
+  border-radius: 0 0 8px 8px; /* Added border radius to bottom corners */
+  position: relative; /* Added position relative */
+  z-index: 1; /* Added z-index */
+}
+
+.room-info h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+}
+
+.room-price {
+  color: #f8c12c;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.room-price span {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: normal;
+}
+
+.room-description {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.room-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.view-details-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1a1a1a;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border: 2px solid transparent;
+  z-index: 2; /* Increased z-index */
+  margin-top: 0.5rem; /* Added margin top */
+}
+
+.view-details-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background-color: #f8c12c;
+  transition: width 0.3s ease;
+  z-index: -1;
+}
+
+.view-details-btn:hover {
+  color: #1a1a1a;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.view-details-btn:hover::before {
+  width: 100%;
+}
+
+.view-details-btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.view-details-btn::after {
+  content: "→";
+  margin-left: 8px;
+  font-size: 1.1em;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.view-details-btn:hover::after {
+  transform: translateX(4px);
+}
+
+@media (min-width: 768px) {
+  .room-card {
+    flex-direction: row;
+    min-height: 250px; /* Changed from fixed height to min-height */
+    height: auto; /* Added auto height */
+  }
+
+  .room-image {
+    width: 40%;
+    height: auto; /* Changed from 100% to auto */
+    min-height: 250px; /* Added min-height */
+    border-radius: 8px 0 0 8px; /* Updated border radius for left side */
+  }
+
+  .room-info {
+    width: 60%;
+    display: flex; /* Added flex display */
+    flex-direction: column; /* Added column direction */
+    border-radius: 0 8px 8px 0; /* Updated border radius for right side */
+  }
+
+  /* Add some space at the bottom to ensure button is visible */
+  .room-info .view-details-btn {
+    margin-top: auto; /* Push button to bottom */
+    align-self: flex-start; /* Align to left */
+  }
+}

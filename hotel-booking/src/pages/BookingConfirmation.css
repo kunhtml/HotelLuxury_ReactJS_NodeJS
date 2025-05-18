@@ -1,0 +1,144 @@
+.confirmation-page {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.confirmation-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.confirmation-header {
+  background-color: #1a1a1a;
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.confirmation-header h1 {
+  margin-bottom: 0.5rem;
+}
+
+.confirmation-details {
+  padding: 2rem;
+}
+
+.confirmation-details h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #f8c12c;
+  padding-bottom: 0.5rem;
+}
+
+.detail-section {
+  margin-bottom: 2rem;
+}
+
+.detail-section h3 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.detail-label {
+  font-weight: 500;
+  color: #666;
+}
+
+.total-price {
+  font-weight: bold;
+  color: #f8c12c;
+  font-size: 1.2rem;
+}
+
+.confirmation-footer {
+  background-color: #f9f9f9;
+  padding: 2rem;
+  text-align: center;
+  border-top: 1px solid #eee;
+}
+
+.confirmation-footer p {
+  margin-bottom: 1rem;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.home-btn,
+.print-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.home-btn {
+  background-color: #1a1a1a;
+  color: white;
+}
+
+.home-btn:hover {
+  background-color: #333;
+}
+
+.print-btn {
+  background-color: #f8c12c;
+  color: #1a1a1a;
+  border: none;
+  font-weight: 500;
+}
+
+.print-btn:hover {
+  background-color: #e6b01f;
+}
+
+.booking-error {
+  text-align: center;
+  padding: 3rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.back-btn {
+  display: inline-block;
+  background-color: #1a1a1a;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  margin-top: 1.5rem;
+  transition: background-color 0.3s;
+}
+
+.back-btn:hover {
+  background-color: #333;
+}
+
+@media print {
+  .header,
+  .footer,
+  .action-buttons {
+    display: none;
+  }
+  
+  .confirmation-container {
+    box-shadow: none;
+  }
+}

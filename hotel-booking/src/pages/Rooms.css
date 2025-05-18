@@ -1,0 +1,54 @@
+.rooms-page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.rooms-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.rooms-header h1 {
+  margin-bottom: 0.5rem;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-group label {
+  font-weight: 500;
+}
+
+.filter-group select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.rooms-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.no-rooms {
+  text-align: center;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  font-weight: 500;
+}

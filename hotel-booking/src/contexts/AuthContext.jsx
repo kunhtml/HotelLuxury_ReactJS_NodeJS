@@ -1,0 +1,104 @@
+import { createContext, useContext, useEffect, useState } from "react";
+import { authService } from "../services/api";
+
+const AuthContext = createContext();
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
+
+export const AuthProvider = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Check if user is logged in on page load
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        if (localStorage.getItem("token")) {
+          const user = await authService.getCurrentUser();
+          setCurrentUser(user);
+        }
+      } catch (error) {
+        console.error("Error fetching current user:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
+
+  // Register a new user
+  const signup = async (firstName, lastName, email, phone, password) => {
+    try {
+      const data = await authService.register(
+        firstName,
+        lastName,
+        email,
+        phone,
+        password
+      );
+      setCurrentUser(data.user);
+      return data.user;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  // Login user
+  const login = async (email, password) => {
+    try {
+      const data = await authService.login(email, password);
+      setCurrentUser(data.user);
+      return data.user;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  // Login with Google (not implemented in backend, would require OAuth)
+  const loginWithGoogle = async () => {
+    throw new Error("Google login not implemented with MySQL backend");
+  };
+
+  // Logout user
+  const signOut = async () => {
+    authService.logout();
+    setCurrentUser(null);
+  };
+
+  // Check if user is admin
+  const isAdmin = () => {
+    return currentUser?.role === "admin";
+  };
+
+  // Create admin account (for demo)
+  const createAdminAccount = async () => {
+    try {
+      const response = await authService.createAdmin();
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const value = {
+    currentUser,
+    signup,
+    login,
+    loginWithGoogle,
+    signOut,
+    isAdmin,
+    createAdminAccount,
+    loading,
+  };
+
+  return (
+    <AuthContext.Provider value={value}>
+      {!loading && children}
+    </AuthContext.Provider>
+  );
+};
+
+export default AuthContext;
