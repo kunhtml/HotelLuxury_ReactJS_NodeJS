@@ -94,15 +94,24 @@ router.post("/login", async (req, res) => {
       role: user.role,
     };
 
-    res.json({
-      user: {
-        id: user.id,
-        firstName: user.first_name,
-        lastName: user.last_name,
-        email: user.email,
-        phone: user.phone,
-        role: user.role,
-      },
+    // Save session explicitly
+    req.session.save((err) => {
+      if (err) {
+        console.error("Session save error:", err);
+        return res.status(500).json({ message: "Error saving session" });
+      }
+
+      console.log("Session saved successfully:", req.session.id);
+      res.json({
+        user: {
+          id: user.id,
+          firstName: user.first_name,
+          lastName: user.last_name,
+          email: user.email,
+          phone: user.phone,
+          role: user.role,
+        },
+      });
     });
   } catch (error) {
     console.error(error);
@@ -144,6 +153,146 @@ router.post("/logout", (req, res) => {
     }
     res.json({ message: "Logged out successfully" });
   });
+});
+
+// Get all users (admin only)
+router.get("/users", verifyToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== "admin") {
+      return res
+        .status(403)
+        .json({ message: "Access denied, admin privileges required" });
+    }
+
+    // Get all users
+    const [users] = await pool.query(
+      "SELECT id, first_name, last_name, email, phone, role, created_at FROM users"
+    );
+
+    // Format users for frontend
+    const formattedUsers = users.map((user) => ({
+      id: user.id,
+      firstName: user.first_name,
+      lastName: user.last_name,
+      email: user.email,
+      phone: user.phone,
+      role: user.role,
+      created_at: user.created_at,
+      bookings_count: 0, // Placeholder, would need a JOIN query to get actual count
+    }));
+
+    res.json(formattedUsers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Update user role (admin only)
+router.patch("/users/:id/role", verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    // Check if user is admin
+    if (req.user.role !== "admin") {
+      return res
+        .status(403)
+        .json({ message: "Access denied, admin privileges required" });
+    }
+
+    // Validate role
+    if (role !== "user" && role !== "admin") {
+      return res.status(400).json({ message: "Invalid role" });
+    }
+
+    // Update user role
+    await pool.query("UPDATE users SET role = ? WHERE id = ?", [role, id]);
+
+    res.json({ message: "User role updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Update user profile
+router.put("/profile", verifyToken, async (req, res) => {
+  try {
+    const { firstName, lastName, phone, currentPassword, newPassword } =
+      req.body;
+    const userId = req.user.id;
+
+    // Get current user data
+    const [users] = await pool.query("SELECT * FROM users WHERE id = ?", [
+      userId,
+    ]);
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const user = users[0];
+
+    // If changing password, verify current password
+    if (newPassword) {
+      if (!currentPassword) {
+        return res
+          .status(400)
+          .json({ message: "Current password is required" });
+      }
+
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+        return res
+          .status(400)
+          .json({ message: "Current password is incorrect" });
+      }
+
+      // Hash new password
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+      // Update user with new password
+      await pool.query(
+        "UPDATE users SET first_name = ?, last_name = ?, phone = ?, password = ? WHERE id = ?",
+        [firstName, lastName, phone, hashedPassword, userId]
+      );
+    } else {
+      // Update user without changing password
+      await pool.query(
+        "UPDATE users SET first_name = ?, last_name = ?, phone = ? WHERE id = ?",
+        [firstName, lastName, phone, userId]
+      );
+    }
+
+    // Get updated user data
+    const [updatedUsers] = await pool.query(
+      "SELECT id, first_name, last_name, email, phone, role FROM users WHERE id = ?",
+      [userId]
+    );
+
+    const updatedUser = updatedUsers[0];
+
+    // Format user data for response
+    const formattedUser = {
+      id: updatedUser.id,
+      firstName: updatedUser.first_name,
+      lastName: updatedUser.last_name,
+      email: updatedUser.email,
+      phone: updatedUser.phone,
+      role: updatedUser.role,
+    };
+
+    // Update session
+    req.session.user = formattedUser;
+
+    res.json(formattedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // Create admin account (for demo purposes)
