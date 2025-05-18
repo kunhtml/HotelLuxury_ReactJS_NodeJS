@@ -8,21 +8,8 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true, // Important for cookies/sessions
 });
-
-// Add token to requests if available
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      config.headers["x-auth-token"] = token;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
 
 // Authentication services
 export const authService = {
@@ -35,18 +22,12 @@ export const authService = {
       phone,
       password,
     });
-    if (response.data.token) {
-      localStorage.setItem("token", response.data.token);
-    }
     return response.data;
   },
 
   // Login user
   login: async (email, password) => {
     const response = await api.post("/auth/login", { email, password });
-    if (response.data.token) {
-      localStorage.setItem("token", response.data.token);
-    }
     return response.data;
   },
 
@@ -56,14 +37,17 @@ export const authService = {
       const response = await api.get("/auth/me");
       return response.data;
     } catch (error) {
-      localStorage.removeItem("token");
       throw error;
     }
   },
 
   // Logout user
-  logout: () => {
-    localStorage.removeItem("token");
+  logout: async () => {
+    try {
+      await api.post("/auth/logout");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   },
 
   // Create admin account (for demo)
