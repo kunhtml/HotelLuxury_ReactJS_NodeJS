@@ -63,8 +63,10 @@ const Login = () => {
   return (
     <div className="auth-container">
       <div className="auth-form-container">
-        <h2>Login to Your Account</h2>
-        <p className="auth-subtitle">Welcome back! Please enter your details</p>
+        <h2>Đăng Nhập Tài Khoản</h2>
+        <p className="auth-subtitle">
+          Chào mừng trở lại! Vui lòng nhập thông tin của bạn
+        </p>
 
         {error && <div className="auth-error">{error}</div>}
         {message && <div className="auth-message">{message}</div>}
@@ -82,7 +84,7 @@ const Login = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Mật khẩu</label>
             <input
               type="password"
               id="password"
@@ -93,22 +95,22 @@ const Login = () => {
           </div>
 
           <div className="form-group form-actions">
+            <Link to="/forgot-password" className="forgot-password">
+              Quên mật khẩu?
+            </Link>
             <div className="remember-me">
               <input type="checkbox" id="remember" />
-              <label htmlFor="remember">Remember me</label>
+              <label htmlFor="remember">Ghi nhớ đăng nhập</label>
             </div>
-            <Link to="/forgot-password" className="forgot-password">
-              Forgot password?
-            </Link>
           </div>
 
           <button type="submit" className="auth-button" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Đang đăng nhập..." : "Đăng Nhập"}
           </button>
         </form>
 
         <div className="auth-divider">
-          <span>or</span>
+          <span>hoặc</span>
         </div>
 
         <button
@@ -117,11 +119,11 @@ const Login = () => {
           disabled={loading}
         >
           <FcGoogle className="google-icon" />
-          <span>Sign in with Google</span>
+          <span>Đăng nhập với Google</span>
         </button>
 
         <p className="auth-redirect">
-          Don't have an account? <Link to="/signup">Sign up</Link>
+          Chưa có tài khoản? <Link to="/signup">Đăng ký</Link>
         </p>
       </div>
     </div>

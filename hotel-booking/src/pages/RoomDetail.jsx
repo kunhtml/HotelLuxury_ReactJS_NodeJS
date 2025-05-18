@@ -5,6 +5,7 @@ import BookingForm from "../components/BookingForm";
 import ReviewsList from "../components/reviews/ReviewsList";
 import ReviewForm from "../components/reviews/ReviewForm";
 import { useAuth } from "../contexts/AuthContext";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import "./RoomDetail.css";
 
 const RoomDetail = () => {
@@ -13,13 +14,34 @@ const RoomDetail = () => {
   const [room, setRoom] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showGallery, setShowGallery] = useState(false);
+
+  // Reset currentImageIndex when room ID changes
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [id]);
 
   useEffect(() => {
     const fetchRoom = async () => {
       try {
         setLoading(true);
         const roomData = await roomService.getRoomById(parseInt(id));
+        console.log("Room data received:", roomData);
+
+        // Ensure images is an array
+        if (roomData && !roomData.images) {
+          roomData.images = [];
+        }
+
+        // If there's an image_url but no images, add it to images array
+        if (roomData && roomData.image_url && roomData.images.length === 0) {
+          roomData.images.push(roomData.image_url);
+        }
+
         setRoom(roomData);
+        // Reset image index when loading a new room
+        setCurrentImageIndex(0);
       } catch (err) {
         setError(err.message || "Error loading room details");
         console.error("Error fetching room:", err);
@@ -58,8 +80,146 @@ const RoomDetail = () => {
         </div>
 
         <div className="room-image-container">
-          <img src={room.images[0]} alt={room.name} />
+          {room.images && room.images.length > 0 ? (
+            <>
+              <img
+                key={`main-image-${currentImageIndex}`} // Add key to force re-render
+                src={room.images[currentImageIndex]}
+                alt={`${room.name} - Ảnh ${currentImageIndex + 1}`}
+                onClick={() => setShowGallery(true)}
+              />
+
+              {room.images.length > 1 && (
+                <div className="image-navigation">
+                  <button
+                    className="nav-button prev"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentImageIndex((prev) =>
+                        prev === 0 ? room.images.length - 1 : prev - 1
+                      );
+                    }}
+                  >
+                    <FaArrowLeft />
+                  </button>
+                  <div className="image-counter">
+                    {currentImageIndex + 1} / {room.images.length}
+                  </div>
+                  <button
+                    className="nav-button next"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentImageIndex((prev) =>
+                        prev === room.images.length - 1 ? 0 : prev + 1
+                      );
+                    }}
+                  >
+                    <FaArrowRight />
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <img
+              src={room.image_url || ""}
+              alt={room.name}
+              onClick={() => setShowGallery(true)}
+            />
+          )}
         </div>
+
+        {room.images && room.images.length > 1 && (
+          <div className="room-thumbnails">
+            {room.images.map((image, index) => (
+              <div
+                key={`thumb-${index}`}
+                className={`thumbnail ${
+                  index === currentImageIndex ? "active" : ""
+                }`}
+                onClick={() => {
+                  console.log("Thumbnail clicked, changing to index:", index);
+                  setCurrentImageIndex(index);
+                }}
+              >
+                <img src={image} alt={`${room.name} - Ảnh ${index + 1}`} />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {showGallery && (
+          <div
+            className="gallery-overlay"
+            onClick={() => setShowGallery(false)}
+          >
+            <div
+              className="gallery-content"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="close-gallery"
+                onClick={() => setShowGallery(false)}
+              >
+                ×
+              </button>
+              <div className="gallery-image-container">
+                <img
+                  key={`gallery-image-${currentImageIndex}`} // Add key to force re-render
+                  src={
+                    room.images && room.images.length > 0
+                      ? room.images[currentImageIndex]
+                      : room.image_url
+                  }
+                  alt={`${room.name} - Ảnh ${currentImageIndex + 1}`}
+                />
+
+                {room.images && room.images.length > 1 && (
+                  <>
+                    <button
+                      className="gallery-nav prev"
+                      onClick={() => {
+                        const newIndex =
+                          currentImageIndex === 0
+                            ? room.images.length - 1
+                            : currentImageIndex - 1;
+                        console.log(
+                          "Gallery prev clicked, changing to index:",
+                          newIndex
+                        );
+                        setCurrentImageIndex(newIndex);
+                      }}
+                    >
+                      <FaArrowLeft />
+                    </button>
+
+                    <button
+                      className="gallery-nav next"
+                      onClick={() => {
+                        const newIndex =
+                          currentImageIndex === room.images.length - 1
+                            ? 0
+                            : currentImageIndex + 1;
+                        console.log(
+                          "Gallery next clicked, changing to index:",
+                          newIndex
+                        );
+                        setCurrentImageIndex(newIndex);
+                      }}
+                    >
+                      <FaArrowRight />
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {room.images && room.images.length > 1 && (
+                <div className="gallery-counter">
+                  {currentImageIndex + 1} / {room.images.length}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         <div className="room-info-container">
           <div className="room-description">

@@ -92,12 +92,14 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .remember-me {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  order: 2; /* Đặt thứ tự hiển thị sau */
 }
 
 .forgot-password {
@@ -105,6 +107,7 @@
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.3s;
+  order: 1; /* Đặt thứ tự hiển thị trước */
 }
 
 .forgot-password:hover {
