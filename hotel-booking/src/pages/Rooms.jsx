@@ -1,45 +1,77 @@
-import { useState } from 'react';
-import { rooms } from '../data/rooms';
-import RoomCard from '../components/RoomCard';
-import './Rooms.css';
+import { useState, useEffect } from "react";
+import { roomService } from "../services/api";
+import RoomCard from "../components/RoomCard";
+import "./Rooms.css";
 
 const Rooms = () => {
-  const [filteredRooms, setFilteredRooms] = useState(rooms);
+  const [rooms, setRooms] = useState([]);
+  const [filteredRooms, setFilteredRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
-    capacity: '',
-    price: ''
+    capacity: "",
+    price: "",
   });
+
+  // Fetch rooms from API
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        setLoading(true);
+        const roomsData = await roomService.getAllRooms();
+        setRooms(roomsData);
+        setFilteredRooms(roomsData);
+      } catch (err) {
+        setError(err.message || "Error loading rooms");
+        console.error("Error fetching rooms:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRooms();
+  }, []);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters({
       ...filters,
-      [name]: value
+      [name]: value,
     });
 
     // Apply filters
     let result = [...rooms];
 
     // Filter by capacity
-    if (name === 'capacity' && value) {
-      result = result.filter(room => room.capacity >= parseInt(value));
+    if (name === "capacity" && value) {
+      result = result.filter((room) => room.capacity >= parseInt(value));
     }
 
     // Filter by price
-    if (name === 'price' && value) {
+    if (name === "price" && value) {
       const maxPrice = parseInt(value);
-      result = result.filter(room => room.price <= maxPrice);
+      result = result.filter((room) => room.price <= maxPrice);
     }
 
     // Apply both filters if both are set
-    if (name === 'capacity' && filters.price) {
-      result = result.filter(room => room.price <= parseInt(filters.price));
-    } else if (name === 'price' && filters.capacity) {
-      result = result.filter(room => room.capacity >= parseInt(filters.capacity));
+    if (name === "capacity" && filters.price) {
+      result = result.filter((room) => room.price <= parseInt(filters.price));
+    } else if (name === "price" && filters.capacity) {
+      result = result.filter(
+        (room) => room.capacity >= parseInt(filters.capacity)
+      );
     }
 
     setFilteredRooms(result);
   };
+
+  if (loading) {
+    return <div className="loading">Loading rooms...</div>;
+  }
+
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
 
   return (
     <div className="rooms-page">
@@ -85,11 +117,11 @@ const Rooms = () => {
 
       <div className="rooms-container">
         {filteredRooms.length > 0 ? (
-          filteredRooms.map(room => (
-            <RoomCard key={room.id} room={room} />
-          ))
+          filteredRooms.map((room) => <RoomCard key={room.id} room={room} />)
         ) : (
-          <p className="no-rooms">No rooms match your criteria. Please adjust your filters.</p>
+          <p className="no-rooms">
+            No rooms match your criteria. Please adjust your filters.
+          </p>
         )}
       </div>
     </div>
