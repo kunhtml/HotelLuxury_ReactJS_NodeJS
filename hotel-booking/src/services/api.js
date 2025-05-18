@@ -55,6 +55,24 @@ export const authService = {
     const response = await api.post("/auth/create-admin");
     return response.data;
   },
+
+  // Get all users (admin only)
+  getAllUsers: async () => {
+    const response = await api.get("/auth/users");
+    return response.data;
+  },
+
+  // Update user role (admin only)
+  updateUserRole: async (id, role) => {
+    const response = await api.patch(`/auth/users/${id}/role`, { role });
+    return response.data;
+  },
+
+  // Update user profile
+  updateProfile: async (userData) => {
+    const response = await api.put("/auth/profile", userData);
+    return response.data;
+  },
 };
 
 // Room services
